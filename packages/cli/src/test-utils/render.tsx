@@ -522,6 +522,9 @@ const configProxy = new Proxy({} as Config, {
     if (prop === 'getUseBackgroundColor') {
       return () => true;
     }
+    if (prop === 'getUseAlternateBuffer') {
+      return () => false;
+    }
     const internal = getMockConfigInternal();
     if (prop in internal) {
       return internal[prop as keyof typeof internal];
@@ -647,6 +650,7 @@ export const renderWithProviders = (
     uiState: providedUiState,
     width,
     mouseEventsEnabled = false,
+    useAlternateBuffer = false,
 
     config = configProxy as unknown as Config,
     uiActions,
@@ -658,6 +662,7 @@ export const renderWithProviders = (
     uiState?: Partial<UIState>;
     width?: number;
     mouseEventsEnabled?: boolean;
+    useAlternateBuffer?: boolean;
     config?: Config;
     uiActions?: Partial<UIActions>;
     persistentState?: {
@@ -702,7 +707,14 @@ export const renderWithProviders = (
 
   const terminalWidth = width ?? baseState.terminalWidth;
   const finalSettings = settings;
-  const finalConfig = config;
+  const finalConfig = new Proxy(config, {
+    get(target, prop) {
+      if (prop === 'getUseAlternateBuffer') {
+        return () => useAlternateBuffer;
+      }
+      return Reflect.get(target, prop);
+    },
+  });
 
   const mainAreaWidth = terminalWidth;
 
@@ -746,6 +758,9 @@ export const renderWithProviders = (
                         <ToolActionsProvider
                           config={finalConfig}
                           toolCalls={allToolCalls}
+                          isExpanded={vi.fn().mockReturnValue(false)}
+                          toggleExpansion={vi.fn()}
+                          toggleAllExpansion={vi.fn()}
                         >
                           <AskUserActionsProvider
                             request={null}
