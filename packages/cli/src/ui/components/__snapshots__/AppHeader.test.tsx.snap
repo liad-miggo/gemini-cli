@@ -4,7 +4,7 @@ exports[`<AppHeader /> > should not render the banner when no flags are set 1`] 
 "
   ▝▜▄     Gemini CLI v1.0.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -20,7 +20,7 @@ exports[`<AppHeader /> > should not render the default banner if shown count is 
 "
   ▝▜▄     Gemini CLI v1.0.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -36,7 +36,7 @@ exports[`<AppHeader /> > should render the banner with default text 1`] = `
 "
   ▝▜▄     Gemini CLI v1.0.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -55,7 +55,7 @@ exports[`<AppHeader /> > should render the banner with warning text 1`] = `
 "
   ▝▜▄     Gemini CLI v1.0.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 ╭──────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -67,5 +67,14 @@ Tips for getting started:
 2. /help for more information
 3. Ask coding questions, edit code or run commands
 4. Be specific for the best results
+"
+`;
+
+exports[`<AppHeader /> > should render the full logo when logged out 1`] = `
+"
+  ▝▜▄    ▗█▀▀▜▙▝█▛▀▀▌▜██▖▟██▘▜█▘▜██▖▝█▛▝█▛  Gemini CLI v1.0.0
+    ▝▜▄  █▌     █▙▟  ▐█▝█▛▐█ ▐█ ▐█▝█▖█▌ █▌
+   ▗▟▀   ▜▙ ▝█▛ █▌▝ ▖▐█   ▐█ ▐█ ▐█ ▝██▌ █▌
+  ▝▀      ▀▀▀▀▘▝▀▀▀▀▘▀▀▘  ▀▀▘▀▀▘▀▀▘ ▝▀▀▝▀▀
 "
 `;

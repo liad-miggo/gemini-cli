@@ -4,7 +4,7 @@ exports[`AlternateBufferQuittingDisplay > renders with a tool awaiting confirmat
 "
   ▝▜▄     Gemini CLI v0.10.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -24,7 +24,7 @@ exports[`AlternateBufferQuittingDisplay > renders with active and pending tool m
 "
   ▝▜▄     Gemini CLI v0.10.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -52,7 +52,7 @@ exports[`AlternateBufferQuittingDisplay > renders with empty history and no pend
 "
   ▝▜▄     Gemini CLI v0.10.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -68,7 +68,7 @@ exports[`AlternateBufferQuittingDisplay > renders with history but no pending it
 "
   ▝▜▄     Gemini CLI v0.10.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -92,7 +92,7 @@ exports[`AlternateBufferQuittingDisplay > renders with pending items but no hist
 "
   ▝▜▄     Gemini CLI v0.10.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -112,7 +112,7 @@ exports[`AlternateBufferQuittingDisplay > renders with user and gemini messages 
 "
   ▝▜▄     Gemini CLI v0.10.0
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 

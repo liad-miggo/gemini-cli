@@ -4,7 +4,7 @@ exports[`App > Snapshots > renders default layout correctly 1`] = `
 "
   ▝▜▄     Gemini CLI v1.2.3
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -49,7 +49,7 @@ Footer
 
   ▝▜▄     Gemini CLI v1.2.3
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -66,7 +66,7 @@ exports[`App > Snapshots > renders with dialogs visible 1`] = `
 "
   ▝▜▄     Gemini CLI v1.2.3
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 
@@ -109,7 +109,7 @@ exports[`App > should render ToolConfirmationQueue along with Composer when tool
 "
   ▝▜▄     Gemini CLI v1.2.3
     ▝▜▄
-   ▗▟▀ 
+   ▗▟▀    Authenticated with gemini-api-key /auth
   ▝▀    
 
 

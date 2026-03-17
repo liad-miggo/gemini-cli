@@ -19,6 +19,13 @@ import { CliSpinner } from './CliSpinner.js';
 
 import { isAppleTerminal } from '@google/gemini-cli-core';
 
+import {
+  longAsciiLogoCompact,
+  shortAsciiLogoCompact,
+  tinyAsciiLogoCompact,
+} from './AsciiArt.js';
+import { getAsciiArtWidth } from '../utils/textUtils.js';
+
 interface AppHeaderProps {
   version: string;
   showDetails?: boolean;
@@ -49,11 +56,28 @@ export const AppHeader = ({ version, showDetails = true }: AppHeaderProps) => {
   const { bannerText } = useBanner(bannerData);
   const { showTips } = useTips();
 
+  const authType = config.getContentGeneratorConfig()?.authType;
+  const loggedOut = !authType;
+
   const showHeader = !(
     settings.merged.ui.hideBanner || config.getScreenReader()
   );
 
   const ICON = isAppleTerminal() ? MAC_TERMINAL_ICON : DEFAULT_ICON;
+
+  let logoArt = ICON;
+  if (loggedOut && terminalWidth > 0) {
+    const widthOfLongLogo = getAsciiArtWidth(longAsciiLogoCompact) + 10;
+    const widthOfShortLogo = getAsciiArtWidth(shortAsciiLogoCompact) + 10;
+
+    if (terminalWidth >= widthOfLongLogo) {
+      logoArt = longAsciiLogoCompact.replace(/^\n/, ''); // remove leading newline
+    } else if (terminalWidth >= widthOfShortLogo) {
+      logoArt = shortAsciiLogoCompact.replace(/^\n/, '');
+    } else {
+      logoArt = tinyAsciiLogoCompact.replace(/^\n/, '');
+    }
+  }
 
   if (!showDetails) {
     return (
@@ -66,7 +90,7 @@ export const AppHeader = ({ version, showDetails = true }: AppHeaderProps) => {
             paddingLeft={2}
           >
             <Box flexShrink={0}>
-              <ThemedGradient>{ICON}</ThemedGradient>
+              <ThemedGradient>{logoArt}</ThemedGradient>
             </Box>
             <Box marginLeft={2} flexDirection="column">
               <Box>
@@ -87,7 +111,7 @@ export const AppHeader = ({ version, showDetails = true }: AppHeaderProps) => {
       {showHeader && (
         <Box flexDirection="row" marginTop={1} marginBottom={1} paddingLeft={2}>
           <Box flexShrink={0}>
-            <ThemedGradient>{ICON}</ThemedGradient>
+            <ThemedGradient>{logoArt}</ThemedGradient>
           </Box>
           <Box marginLeft={2} flexDirection="column">
             {/* Line 1: Gemini CLI vVersion [Updating] */}
