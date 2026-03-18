@@ -17,13 +17,13 @@ import { act } from 'react';
 import { renderHook } from '../../test-utils/render.js';
 import { useSuspend } from './useSuspend.js';
 import {
-  writeToStdout,
   disableMouseEvents,
   enableMouseEvents,
   enterAlternateScreen,
   exitAlternateScreen,
   enableLineWrapping,
   disableLineWrapping,
+  clearTerminalScreen,
 } from '@google/gemini-cli-core';
 import {
   cleanupTerminalOnExit,
@@ -36,7 +36,7 @@ vi.mock('@google/gemini-cli-core', async () => {
   const actual = await vi.importActual('@google/gemini-cli-core');
   return {
     ...actual,
-    writeToStdout: vi.fn(),
+    clearTerminalScreen: vi.fn(),
     disableMouseEvents: vi.fn(),
     enableMouseEvents: vi.fn(),
     enterAlternateScreen: vi.fn(),
@@ -115,7 +115,7 @@ describe('useSuspend', () => {
 
     expect(exitAlternateScreen).toHaveBeenCalledTimes(1);
     expect(enableLineWrapping).toHaveBeenCalledTimes(1);
-    expect(writeToStdout).toHaveBeenCalledWith('\x1b[2J\x1b[H');
+    expect(clearTerminalScreen).toHaveBeenCalledTimes(1);
     expect(disableMouseEvents).toHaveBeenCalledTimes(1);
     expect(cleanupTerminalOnExit).toHaveBeenCalledTimes(1);
     expect(setRawMode).toHaveBeenCalledWith(false);
