@@ -243,6 +243,7 @@ export const AppContainer = (props: AppContainerProps) => {
       config.getScreenReader(),
     ),
   );
+  const isAlternateBufferRef = useRef(isAlternateBuffer);
   const [corgiMode, setCorgiMode] = useState(false);
   const [forceRerenderKey, setForceRerenderKey] = useState(0);
   const [debugMessage, setDebugMessage] = useState<string>('');
@@ -613,11 +614,11 @@ export const AppContainer = (props: AppContainerProps) => {
   });
 
   const refreshStatic = useCallback(() => {
-    if (!isAlternateBuffer) {
+    if (!isAlternateBufferRef.current) {
       stdout.write(ansiEscapes.clearTerminal);
     }
     setHistoryRemountKey((prev) => prev + 1);
-  }, [setHistoryRemountKey, isAlternateBuffer, stdout]);
+  }, [setHistoryRemountKey, stdout]);
 
   const handleEditorClose = useCallback(() => {
     if (isAlternateBuffer) {
@@ -1286,7 +1287,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       triggerExpandHint(null);
       if (!constrainHeight) {
         setConstrainHeight(true);
-        if (!isAlternateBuffer) {
+        if (!isAlternateBufferRef.current) {
           refreshStatic();
         }
       }
@@ -1365,7 +1366,6 @@ Logging in with Google... Restarting Gemini CLI to continue.
       config,
       constrainHeight,
       setConstrainHeight,
-      isAlternateBuffer,
       refreshStatic,
       reset,
       handleHintSubmit,
@@ -1693,27 +1693,32 @@ Logging in with Google... Restarting Gemini CLI to continue.
       }
 
       if (keyMatchers[Command.TOGGLE_ALTERNATE_BUFFER](key)) {
-        if (!isAlternateBuffer) {
+        if (!isAlternateBufferRef.current) {
           if (shouldEnterAlternateScreen(true, config.getScreenReader())) {
             enterAlternateScreen();
             disableLineWrapping();
             enableMouseEvents();
             clearTerminalScreen();
             setIsAlternateBuffer(true);
+            isAlternateBufferRef.current = true;
           }
         } else {
-          exitAlternateScreen();
           clearTerminalScreen();
+          exitAlternateScreen();
           enableLineWrapping();
           disableMouseEvents();
           setCopyModeEnabled(false);
           setIsAlternateBuffer(false);
+          isAlternateBufferRef.current = false;
         }
         setHistoryRemountKey((prev) => prev + 1);
         return true;
       }
 
-      if (isAlternateBuffer && keyMatchers[Command.TOGGLE_COPY_MODE](key)) {
+      if (
+        isAlternateBufferRef.current &&
+        keyMatchers[Command.TOGGLE_COPY_MODE](key)
+      ) {
         setCopyModeEnabled(true);
         disableMouseEvents();
         return true;
@@ -1733,7 +1738,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
         handleSuspend();
       } else if (
         keyMatchers[Command.TOGGLE_COPY_MODE](key) &&
-        !isAlternateBuffer
+        !isAlternateBufferRef.current
       ) {
         showTransientMessage({
           text: 'Use Ctrl+O to expand and collapse blocks of content.',
@@ -1750,7 +1755,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
           // If the user manually collapses the view, show the hint and reset the x-second timer.
           triggerExpandHint(true);
         }
-        if (!isAlternateBuffer) {
+        if (!isAlternateBufferRef.current) {
           refreshStatic();
         }
       }
@@ -1798,7 +1803,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
         setConstrainHeight(false);
         // If the user manually expands the view, show the hint and reset the x-second timer.
         triggerExpandHint(true);
-        if (!isAlternateBuffer) {
+        if (!isAlternateBufferRef.current) {
           refreshStatic();
         }
         return true;
@@ -1891,7 +1896,6 @@ Logging in with Google... Restarting Gemini CLI to continue.
       refreshStatic,
       setCopyModeEnabled,
       tabFocusTimeoutRef,
-      isAlternateBuffer,
       shortcutsHelpVisible,
       backgroundCurrentShell,
       toggleBackgroundShell,

@@ -72,9 +72,9 @@ export function useSuspend({
 
       if (shouldUseAlternateScreen) {
         // Leave alternate buffer before suspension so the shell stays usable.
+        clearTerminalScreen();
         exitAlternateScreen();
         enableLineWrapping();
-        clearTerminalScreen();
       }
 
       // Cleanup before suspend.
