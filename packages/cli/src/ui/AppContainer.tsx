@@ -1706,6 +1706,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
           clearTerminalScreen();
           enableLineWrapping();
           disableMouseEvents();
+          setCopyModeEnabled(false);
           setIsAlternateBuffer(false);
         }
         setHistoryRemountKey((prev) => prev + 1);
