@@ -238,7 +238,10 @@ export const AppContainer = (props: AppContainerProps) => {
 
   useMemoryMonitor(historyManager);
   const [isAlternateBuffer, setIsAlternateBuffer] = useState(() =>
-    config.getUseAlternateBuffer(),
+    shouldEnterAlternateScreen(
+      config.getUseAlternateBuffer(),
+      config.getScreenReader(),
+    ),
   );
   const [corgiMode, setCorgiMode] = useState(false);
   const [forceRerenderKey, setForceRerenderKey] = useState(0);
@@ -616,13 +619,8 @@ export const AppContainer = (props: AppContainerProps) => {
     setHistoryRemountKey((prev) => prev + 1);
   }, [setHistoryRemountKey, isAlternateBuffer, stdout]);
 
-  const shouldUseAlternateScreen = shouldEnterAlternateScreen(
-    isAlternateBuffer,
-    config.getScreenReader(),
-  );
-
   const handleEditorClose = useCallback(() => {
-    if (shouldUseAlternateScreen) {
+    if (isAlternateBuffer) {
       // The editor may have exited alternate buffer mode so we need to
       // enter it again to be safe.
       enterAlternateScreen();
@@ -632,7 +630,7 @@ export const AppContainer = (props: AppContainerProps) => {
     }
     terminalCapabilityManager.enableSupportedModes();
     refreshStatic();
-  }, [refreshStatic, shouldUseAlternateScreen, app]);
+  }, [refreshStatic, isAlternateBuffer, app]);
 
   const [editorError, setEditorError] = useState<string | null>(null);
   const {
@@ -1613,7 +1611,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
     setRawMode,
     refreshStatic,
     setForceRerenderKey,
-    shouldUseAlternateScreen,
+    shouldUseAlternateScreen: isAlternateBuffer,
   });
 
   useEffect(() => {
@@ -1696,11 +1694,13 @@ Logging in with Google... Restarting Gemini CLI to continue.
 
       if (keyMatchers[Command.TOGGLE_ALTERNATE_BUFFER](key)) {
         if (!isAlternateBuffer) {
-          enterAlternateScreen();
-          disableLineWrapping();
-          enableMouseEvents();
-          clearTerminalScreen();
-          setIsAlternateBuffer(true);
+          if (shouldEnterAlternateScreen(true, config.getScreenReader())) {
+            enterAlternateScreen();
+            disableLineWrapping();
+            enableMouseEvents();
+            clearTerminalScreen();
+            setIsAlternateBuffer(true);
+          }
         } else {
           exitAlternateScreen();
           clearTerminalScreen();

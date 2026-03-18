@@ -16,10 +16,8 @@ import {
   type ResumedSessionData,
   coreEvents,
   createWorkingStdio,
-  disableMouseEvents,
   enableMouseEvents,
   disableLineWrapping,
-  enableLineWrapping,
   shouldEnterAlternateScreen,
   recordSlowRender,
   writeToStdout,
@@ -68,9 +66,6 @@ export async function startInteractiveUI(
   const mouseEventsEnabled = useAlternateBuffer;
   if (mouseEventsEnabled) {
     enableMouseEvents();
-    registerCleanup(() => {
-      disableMouseEvents();
-    });
   }
 
   const { matchers, errors } = await loadKeyMatchers();
@@ -172,9 +167,6 @@ export async function startInteractiveUI(
 
   if (useAlternateBuffer) {
     disableLineWrapping();
-    registerCleanup(() => {
-      enableLineWrapping();
-    });
   }
 
   checkForUpdates(settings)

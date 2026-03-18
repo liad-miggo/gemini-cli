@@ -65,10 +65,7 @@ describe('<ShellToolMessage />', () => {
       ['SHELL_COMMAND_NAME', SHELL_COMMAND_NAME],
       ['SHELL_TOOL_NAME', SHELL_TOOL_NAME],
     ])('clicks inside the shell area sets focus for %s', async (_, name) => {
-      const { lastFrame, simulateClick, unmount } = renderShell(
-        { name },
-        { mouseEventsEnabled: true },
-      );
+      const { lastFrame, simulateClick, unmount } = renderShell({ name });
 
       await waitFor(() => {
         expect(lastFrame()).toContain('A shell command');
