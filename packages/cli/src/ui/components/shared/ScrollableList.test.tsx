@@ -85,7 +85,7 @@ const TestComponent = ({
   }, [onRef]);
 
   return (
-    <MouseProvider mouseEventsEnabled={false}>
+    <MouseProvider>
       <KeypressProvider>
         <ScrollProvider>
           <Box flexDirection="column" width={80} height={24} padding={1}>
@@ -230,7 +230,7 @@ describe('ScrollableList Demo Behavior', () => {
       }, []);
 
       return (
-        <MouseProvider mouseEventsEnabled={false}>
+        <MouseProvider>
           <KeypressProvider>
             <ScrollProvider>
               <Box flexDirection="column" width={80} height={10}>
@@ -337,7 +337,7 @@ describe('ScrollableList Demo Behavior', () => {
       let result: ReturnType<typeof render>;
       await act(async () => {
         result = render(
-          <MouseProvider mouseEventsEnabled={false}>
+          <MouseProvider>
             <KeypressProvider>
               <ScrollProvider>
                 <Box flexDirection="column" width={80} height={10}>
@@ -447,7 +447,7 @@ describe('ScrollableList Demo Behavior', () => {
       let result: ReturnType<typeof render>;
       await act(async () => {
         result = render(
-          <MouseProvider mouseEventsEnabled={false}>
+          <MouseProvider>
             <KeypressProvider>
               <ScrollProvider>
                 <Box width={100} height={20}>
@@ -497,7 +497,7 @@ describe('ScrollableList Demo Behavior', () => {
       }, []);
 
       return (
-        <MouseProvider mouseEventsEnabled={false}>
+        <MouseProvider>
           <KeypressProvider>
             <ScrollProvider>
               <Box flexDirection="column" width={80} height={5}>
@@ -622,7 +622,7 @@ describe('ScrollableList Demo Behavior', () => {
       );
 
       return (
-        <MouseProvider mouseEventsEnabled={false}>
+        <MouseProvider>
           <KeypressProvider>
             <ScrollProvider>
               <Box flexDirection="column" width={80} height={4}>
@@ -696,7 +696,7 @@ describe('ScrollableList Demo Behavior', () => {
       }, []);
 
       return (
-        <MouseProvider mouseEventsEnabled={false}>
+        <MouseProvider>
           <KeypressProvider>
             <ScrollProvider>
               <Box flexDirection="column" width={80} height={10}>

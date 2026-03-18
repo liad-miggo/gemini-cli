@@ -108,7 +108,6 @@ export async function startInteractiveUI(
             }
           >
             <MouseProvider
-              mouseEventsEnabled={mouseEventsEnabled}
               debugKeystrokeLogging={
                 settings.merged.general.debugKeystrokeLogging
               }

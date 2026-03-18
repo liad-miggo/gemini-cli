@@ -60,11 +60,9 @@ export function useMouse(handler: MouseHandler, { isActive = true } = {}) {
 
 export function MouseProvider({
   children,
-  mouseEventsEnabled,
   debugKeystrokeLogging,
 }: {
   children: React.ReactNode;
-  mouseEventsEnabled?: boolean;
   debugKeystrokeLogging?: boolean;
 }) {
   const { stdin } = useStdin();
@@ -90,10 +88,6 @@ export function MouseProvider({
   );
 
   useEffect(() => {
-    if (!mouseEventsEnabled) {
-      return;
-    }
-
     let mouseBuffer = '';
 
     const broadcast = (event: MouseEvent) => {
@@ -187,7 +181,7 @@ export function MouseProvider({
     return () => {
       stdin.removeListener('data', handleData);
     };
-  }, [stdin, mouseEventsEnabled, subscribers, debugKeystrokeLogging]);
+  }, [stdin, subscribers, debugKeystrokeLogging]);
 
   return (
     <MouseContext.Provider value={{ subscribe, unsubscribe }}>

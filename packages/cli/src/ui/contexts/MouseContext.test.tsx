@@ -58,7 +58,7 @@ describe('MouseContext', () => {
       setRawMode: vi.fn(),
     });
     wrapper = ({ children }: { children: React.ReactNode }) => (
-      <MouseProvider mouseEventsEnabled={true}>{children}</MouseProvider>
+      <MouseProvider>{children}</MouseProvider>
     );
     vi.mocked(appEvents.emit).mockClear();
   });
