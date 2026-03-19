@@ -1,0 +1,9 @@
+PROOF OF CONCEPT - ARTIFACT POISONING
+======================================
+This file exists in the attacker's fork branch.
+If the chained workflow checked out this code and you see this in CI logs,
+it proves arbitrary code execution from a fork PR via artifact poisoning.
+
+Timestamp: 2026-03-19
+Researcher: liad-miggo
+Target: google-gemini/gemini-cli trigger_e2e.yml -> chained_e2e.yml chain
