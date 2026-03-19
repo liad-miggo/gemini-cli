@@ -1199,6 +1199,11 @@ Logging in with Google... Restarting Gemini CLI to continue.
 
   setIsBackgroundShellListOpenRef.current = setIsBackgroundShellListOpen;
 
+  const pendingHistoryItems = useMemo(
+    () => [...pendingSlashCommandHistoryItems, ...pendingGeminiHistoryItems],
+    [pendingSlashCommandHistoryItems, pendingGeminiHistoryItems],
+  );
+
   const lastOutputTimeRef = useRef(0);
 
   useEffect(() => {
@@ -1248,10 +1253,6 @@ Logging in with Google... Restarting Gemini CLI to continue.
 
   cancelHandlerRef.current = useCallback(
     (shouldRestorePrompt: boolean = true) => {
-      const pendingHistoryItems = [
-        ...pendingSlashCommandHistoryItems,
-        ...pendingGeminiHistoryItems,
-      ];
       if (isToolAwaitingConfirmation(pendingHistoryItems)) {
         return; // Don't clear - user may be composing a follow-up message
       }
@@ -1285,8 +1286,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       inputHistory,
       getQueuedMessagesText,
       clearQueue,
-      pendingSlashCommandHistoryItems,
-      pendingGeminiHistoryItems,
+      pendingHistoryItems,
     ],
   );
 
@@ -1322,10 +1322,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       const isIdle = streamingState === StreamingState.Idle;
       const isAgentRunning =
         streamingState === StreamingState.Responding ||
-        isToolExecuting([
-          ...pendingSlashCommandHistoryItems,
-          ...pendingGeminiHistoryItems,
-        ]);
+        isToolExecuting(pendingHistoryItems);
 
       if (isSlash && isAgentRunning) {
         const { commandToExecute } = parseSlashCommand(
@@ -1387,8 +1384,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       isMcpReady,
       streamingState,
       messageQueue.length,
-      pendingSlashCommandHistoryItems,
-      pendingGeminiHistoryItems,
+      pendingHistoryItems,
       config,
       constrainHeight,
       setConstrainHeight,
@@ -1707,11 +1703,6 @@ Logging in with Google... Restarting Gemini CLI to continue.
     customWittyPhrases: settings.merged.ui.customWittyPhrases,
     errorVerbosity: settings.merged.ui.errorVerbosity,
   });
-
-  const pendingHistoryItems = useMemo(
-    () => [...pendingSlashCommandHistoryItems, ...pendingGeminiHistoryItems],
-    [pendingSlashCommandHistoryItems, pendingGeminiHistoryItems],
-  );
 
   const handleGlobalKeypress = useCallback(
     (key: Key): boolean => {
@@ -2412,11 +2403,7 @@ Logging in with Google... Restarting Gemini CLI to continue.
       newAgents,
       showIsExpandableHint,
       hintMode:
-        config.isModelSteeringEnabled() &&
-        isToolExecuting([
-          ...pendingSlashCommandHistoryItems,
-          ...pendingGeminiHistoryItems,
-        ]),
+        config.isModelSteeringEnabled() && isToolExecuting(pendingHistoryItems),
       hintBuffer: '',
     }),
     [
