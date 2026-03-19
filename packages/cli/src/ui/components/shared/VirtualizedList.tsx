@@ -14,6 +14,7 @@ import {
   useCallback,
 } from 'react';
 import type React from 'react';
+import { debugLogger } from '@google/gemini-cli-core';
 import { theme } from '../../semantic-colors.js';
 import { useBatchedScroll } from '../../hooks/useBatchedScroll.js';
 import { useUIState } from '../../contexts/UIStateContext.js';
@@ -70,6 +71,9 @@ function VirtualizedList<T>(
   props: VirtualizedListProps<T>,
   ref: React.Ref<VirtualizedListRef<T>>,
 ) {
+  debugLogger.log(
+    `XXX VirtualizedList rendered with ${props.data.length} children`,
+  );
   const {
     data,
     renderItem,
