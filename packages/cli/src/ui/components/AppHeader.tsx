@@ -87,7 +87,7 @@ export const AppHeader = ({ version, showDetails = true }: AppHeaderProps) => {
             flexDirection="row"
             marginTop={1}
             marginBottom={1}
-            paddingLeft={2}
+            paddingLeft={1}
           >
             <Box flexShrink={0}>
               <ThemedGradient>{logoArt}</ThemedGradient>
@@ -109,7 +109,7 @@ export const AppHeader = ({ version, showDetails = true }: AppHeaderProps) => {
   return (
     <Box flexDirection="column">
       {showHeader && (
-        <Box flexDirection="row" marginTop={1} marginBottom={1} paddingLeft={2}>
+        <Box flexDirection="row" marginTop={1} marginBottom={1} paddingLeft={1}>
           <Box flexShrink={0}>
             <ThemedGradient>{logoArt}</ThemedGradient>
           </Box>

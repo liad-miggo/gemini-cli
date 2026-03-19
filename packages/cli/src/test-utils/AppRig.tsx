@@ -93,9 +93,22 @@ vi.mock('@google/gemini-cli-core', async (importOriginal) => {
   // Register the real execution logic so MockShellExecutionService can fall back to it
   MockService.setOriginalImplementation(original.ShellExecutionService.execute);
 
+  const mockIdeClient = {
+    getInstance: vi.fn().mockResolvedValue({
+      getCurrentIde: () => undefined,
+      addStatusChangeListener: vi.fn(),
+      removeStatusChangeListener: vi.fn(),
+      addTrustChangeListener: vi.fn(),
+      removeTrustChangeListener: vi.fn(),
+      getConnectionStatus: () => ({ status: 'disconnected' }),
+      disconnect: vi.fn().mockResolvedValue(undefined),
+    }),
+  };
+
   return {
     ...original,
     ShellExecutionService: MockService,
+    IdeClient: mockIdeClient,
   };
 });
 
@@ -171,6 +184,7 @@ export class AppRig {
   awaitingResponse = false;
 
   constructor(private options: AppRigOptions = {}) {
+    vi.stubEnv('ANTIGRAVITY_CLI_ALIAS', '');
     const uniqueId = randomUUID();
     this.testDir = fs.mkdtempSync(
       path.join(os.tmpdir(), `gemini-app-rig-${uniqueId.slice(0, 8)}-`),
@@ -280,14 +294,14 @@ export class AppRig {
   }
 
   private stubRefreshAuth() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const gcConfig = this.config as any;
     gcConfig.refreshAuth = async (authMethod: AuthType) => {
       gcConfig.modelAvailabilityService.reset();
 
       const newContentGeneratorConfig = {
         authType: authMethod,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+         
         proxy: gcConfig.getProxy(),
         apiKey: process.env['GEMINI_API_KEY'] || 'test-api-key',
       };
@@ -389,11 +403,11 @@ export class AppRig {
     return isAnyToolActive || isAwaitingConfirmation;
   }
 
-  render() {
+  async render() {
     if (!this.config || !this.settings)
       throw new Error('AppRig not initialized');
 
-    act(() => {
+    await act(async () => {
       this.renderResult = renderWithProviders(
         <AppContainer
           config={this.config!}
@@ -412,10 +426,12 @@ export class AppRig {
           width: this.options.terminalWidth ?? 120,
           useAlternateBuffer: false,
           uiState: {
-            terminalHeight: this.options.terminalHeight ?? 40,
+            terminalHeight: this.options.terminalHeight ?? 80,
           },
         },
       );
+      // Allow async initializations (like banners) to settle within the act boundary
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
   }
 
@@ -456,7 +472,7 @@ export class AppRig {
     const actualToolName = toolName === '*' ? undefined : toolName;
     this.config
       .getPolicyEngine()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+       
       .removeRulesForTool(actualToolName as string, source);
     this.breakpointTools.delete(toolName);
   }
@@ -709,7 +725,7 @@ export class AppRig {
   }
 
   async waitForIdle(timeout = 20000) {
-    await this.waitForOutput('Type your message', timeout);
+    await this.waitForOutput('Type your message or @path/to/file', timeout);
   }
 
   async sendMessage(text: string) {
@@ -729,7 +745,7 @@ export class AppRig {
         .getGeminiClient()
         ?.getChatRecordingService();
       if (recordingService) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-type-assertion
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (recordingService as any).conversationFile = null;
       }
     }
@@ -749,7 +765,7 @@ export class AppRig {
     MockShellExecutionService.reset();
     ideContextStore.clear();
     // Forcefully clear IdeClient singleton promise
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-type-assertion
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (IdeClient as any).instancePromise = null;
     vi.clearAllMocks();
 
